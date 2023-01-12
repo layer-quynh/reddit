@@ -1,0 +1,44 @@
+version: "3.8"
+services:
+    web:
+        build:
+            context: .
+            target: builder
+        ports:
+            - "8000"
+        depends_on:
+            db:
+                condition: service_healthy
+            cache:
+                condition: service_healthy
+    db:
+        image: postgres
+        restart: always
+        ports:
+            - "5432"
+        environment:
+            POSTGRES_USER: 'postgres'
+            POSTGRES_PASSWORD: 'postgres'
+            POSTGRES_DB: 'seta_test'
+        healthcheck:
+            test: "pg_isready --username=postgres && psql --username=postgres --list"
+            interval: 5s
+            timeout: 3s
+            retries: 30
+    cache:
+        image: redis:6.2-alpine
+        restart: always
+        ports:
+            - "6379"
+        command: redis-server --save 20 1 --loglevel warning
+        volumes:
+            - cache:/data
+        healthcheck:
+            test: "redis-cli ping"
+            interval: 5s
+            timeout: 3s
+            retries: 30
+
+volumes:
+    cache:
+        driver: local
