@@ -121,3 +121,14 @@ data.
 Using `path` with index, we could quickly find all the child
 comments of a comments. Because we only need to find the prefix 
 of `path`.
+
+### Install
+
+```
+git clone git@github.com:layer-quynh/reddit.git
+```
+
+```commandline
+$ cd reddit
+$ docker compose up
+```
