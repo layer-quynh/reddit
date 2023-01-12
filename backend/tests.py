@@ -259,7 +259,7 @@ class StressTestCase(TransactionTestCase):
         return list_post
 
     def test_stress(self):
-        self.generate(350, 350)
+        self.generate(100000, 150)
         top_posts = self.get_top()
         update_total_comments()
         validation_top_posts = [post.id for post in Post.objects.order_by('-total_comments').all()[:10]]
